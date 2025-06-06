@@ -68,3 +68,60 @@ def login():
     # User reached route via GET (as by clicking a link or via redirect)
     else:
         return render_template("login.html")
+
+
+@app.route("/logout")
+def logout():
+    """Log user out"""
+
+    # Forget any user_id
+    session.clear()
+
+    # Redirect user to login form
+    return redirect("/")
+
+
+@app.route("/register", methods=["GET", "POST"])
+def register():
+    """Register user"""
+    if request.method == "POST":
+        # Ensure username was submitted
+        username = request.form.get("username")
+        if not username:
+            return apology("must provide username", 400)
+
+        # Ensure username does not already exist
+        rows = db.execute(
+            "SELECT * FROM users WHERE username = ?", request.form.get("username")
+        )
+        if len(rows) == 1:
+            return apology("username already exists", 400)
+
+        # Ensure password was submitted
+        password = request.form.get("password")
+        if not password:
+            return apology("must provide password", 400)
+
+        # Ensure password was submitted twice
+        confirmation = request.form.get("confirmation")
+        if not confirmation:
+            return apology("must confirm the password", 400)
+
+        # Ensure password and confirmation are identical
+        if confirmation != password:
+            return apology("password needs to match", 400)
+
+        # Insert user into database
+        db.execute("INSERT INTO users (username, hash) VALUES(?, ?)",
+                   username, generate_password_hash(password))
+        id = db.execute(
+            "SELECT id FROM users WHERE username = ?", username
+        )
+
+        # Remember which user has logged in
+        session["user_id"] = id[0]["id"]
+        return redirect("/")
+
+    # User reached route via GET (as by clicking a link or via redirect)
+    else:
+        return render_template("register.html")

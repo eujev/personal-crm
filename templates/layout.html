@@ -32,7 +32,7 @@
                     {% if session["user_id"] %}
                         <ul class="navbar-nav me-auto mt-2">
                             <li class="nav-item"><a class="nav-link" href="/quote">Quote</a></li>
-                            <li class="nav-item"><a class="nav-link" href="/contacts">History</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/contacts">Contacts</a></li>
                         </ul>
                         <ul class="navbar-nav ms-auto mt-2">
                             <li class="nav-item"><a class="nav-link" href="/profile">Profile</a></li>
@@ -64,7 +64,7 @@
             <form action="https://validator.w3.org/check" class="text-center" enctype="multipart/form-data" method="post" target="_blank">
                 <input name="doctype" type="hidden" value="HTML5">
                 <input name="fragment" type="hidden">
-                <input alt="Validate" src="/static/I_heart_validator.png" type="image"> <!-- https://validator.w3.org/ -->
+                <!--<input alt="Validate" src="/static/I_heart_validator.png" type="image"> --> <!-- https://validator.w3.org/ -->
             </form>
             <script>
                 document.addEventListener('DOMContentLoaded', function() {
