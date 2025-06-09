@@ -1,5 +1,5 @@
 from cs50 import SQL
-from flask import Flask, flash, redirect, render_template, request, session
+from flask import Flask, flash, redirect, render_template, request, session, url_for
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from flask_session import Session
@@ -162,3 +162,63 @@ def contacts():
         session["user_id"],
     )
     return render_template("contacts.html", user_contacts=user_contacts)
+
+
+@app.route("/contact/<person_id>")
+@login_required
+def contact(person_id):
+    """Show all contacts"""
+    try:
+        user_contact = db.execute(
+            "SELECT firstname, lastname, birthday, address, mail FROM people WHERE user_id = ? AND id = ?",
+            session["user_id"],
+            person_id,
+        )
+    except ValueError:
+        return apology("Contact does not exist")
+    return render_template("contact.html", contact=user_contact)
+
+
+@app.route("/profile")
+@login_required
+def profile():
+    user_row = db.execute("SELECT * FROM users WHERE id = ?", session["user_id"])
+    return render_template("profile.html", username=user_row[0]["username"])
+
+
+@app.route("/change_password", methods=["GET", "POST"])
+@login_required
+def change_password():
+    if request.method == "POST":
+        # Ensure old password was submitted
+        old_password = request.form.get("old_password")
+        if not old_password:
+            return apology("must provide old password", 400)
+
+        # Ensure new password was submitted
+        new_password = request.form.get("new_password")
+        if not new_password:
+            return apology("must provide new password", 400)
+
+        # Ensure password was submitted twice
+        confirmation = request.form.get("confirmation")
+        if not confirmation:
+            return apology("must confirm the new password", 400)
+
+        # Query database for username
+        user_row = db.execute("SELECT * FROM users WHERE id = ?", session["user_id"])
+        # Ensure username exists and password is correct
+        if not check_password_hash(user_row[0]["hash"], old_password):
+            return apology("invalid password", 403)
+
+        # Ensure password and confirmation are identical
+        if confirmation != new_password:
+            return apology("new password needs to match", 400)
+        else:
+            db.execute("UPDATE users SET hash = ? WHERE id = ?",
+                       generate_password_hash(new_password), session["user_id"])
+            flash("Password changed!")
+
+        return redirect("/")
+    else:
+        return render_template("change_password.html")

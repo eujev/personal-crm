@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Profile
+{% endblock %}
+
+{% block main %}
+<div class="card" style="text-align: center">
+    <div class="card-header" id="text-start">
+        Account
+    </div>
+    <div class="card-body">
+        <h5 class="card-title">User Name</h5>
+        <p class="fw-bold" style='margin: 0'>{{ username }}</p>
+        <a href="/change_password" class="btn btn-primary">Change password</a>
+    </div>
+</div>
+{% endblock %}
