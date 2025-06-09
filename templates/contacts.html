@@ -16,7 +16,7 @@
         <tbody>
             {% for contact in user_contacts %}
                 <tr>
-                    <td>{{ contact.firstname }}</td>
+                    <td><a href="{{ url_for( 'contact', person_id=contact.id) }}"> {{ contact.firstname }} </a></td>
                     <td>{{ contact.lastname }}</td>
                     <td>{{ contact.birthday }}</td>
                 </tr>

@@ -158,7 +158,7 @@ def add_cash():
 def contacts():
     """Show all contacts"""
     user_contacts = db.execute(
-        "SELECT firstname, lastname, birthday FROM people WHERE user_id = ? ORDER BY firstname ASC, lastname ASC",
+        "SELECT firstname, lastname, birthday, id FROM people WHERE user_id = ? ORDER BY firstname ASC, lastname ASC",
         session["user_id"],
     )
     return render_template("contacts.html", user_contacts=user_contacts)
@@ -176,7 +176,7 @@ def contact(person_id):
         )
     except ValueError:
         return apology("Contact does not exist")
-    return render_template("contact.html", contact=user_contact)
+    return render_template("contact.html", contact=user_contact[0])
 
 
 @app.route("/profile")

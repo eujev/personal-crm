@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Contact
+{% endblock %}
+
+{% block main %}
+<div class="card" style="text-align: center">
+    <div class="card-header" id="text-start">
+            {{ contact.firstname }}
+    </div>
+    <div class="card-body">
+        <h5 class="card-title">Contact</h5>
+            <p class="fw-bold" style='margin: 0'>{{ contact.firstname }} {{ contact.lastname }}</p>
+            <p class="fw-bold" style='margin: 0'>{{ contact.birthday }}</p>
+            <p class="fw-bold" style='margin: 0'>{{ contact.address }}</p>
+            <p class="fw-bold" style='margin: 0'>{{ contact.mail }}</p>
+        <a href="/update_contact" class="btn btn-primary">Update Contact</a>
+        <a href="/delete_contact" class="btn btn-primary">Delete Contact</a>
+    </div>
+</div>
+{% endblock %}
