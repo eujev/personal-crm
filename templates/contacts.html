@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Contacts
+{% endblock %}
+
+{% block main %}
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Lastname</th>
+                <th>Birthday</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for contact in user_contacts %}
+                <tr>
+                    <td>{{ contact.firstname }}</td>
+                    <td>{{ contact.lastname }}</td>
+                    <td>{{ contact.birthday }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+</table>
+{% endblock %}

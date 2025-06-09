@@ -135,8 +135,6 @@ def add_cash():
         if not firstname:
             return redirect("/")
         birthday = request.form.get("birthday")
-        if not birthday:
-            birthday = "NULL"
         lastname = request.form.get("lastname")
         address = request.form.get("address")
         email = request.form.get("email")
@@ -160,6 +158,7 @@ def add_cash():
 def contacts():
     """Show all contacts"""
     user_contacts = db.execute(
-        "SELECT firstname, lastname FROM people WHERE user_id = ?", session["user_id"]
+        "SELECT firstname, lastname, birthday FROM people WHERE user_id = ? ORDER BY firstname ASC, lastname ASC",
+        session["user_id"],
     )
     return render_template("contacts.html", user_contacts=user_contacts)
