@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Add Contact
+{% endblock %}
+
+{% block main %}
+    <form action="/add_contact" method="post">
+        <div class="mb-3">
+            <input autocomplete="off" autofocus class="form-control mx-auto w-auto" name="firstname" placeholder="First name" type="text">
+        </div>
+        <div class="mb-3">
+            <input autocomplete="off" class="form-control mx-auto w-auto" name="lastname" placeholder="Last name (optional)" type="text">
+        </div>
+        <div class="mb-3">
+            <input autocomplete="off" class="form-control mx-auto w-auto" name="adress" placeholder="Address (optional)" type="text">
+        </div>
+        <div class="mb-3">
+            <input autocomplete="off" class="form-control mx-auto w-auto" name="email" placeholder="E-Mail (optional)" type="text">
+        </div>
+        <div class="mb-3">
+            <input autocomplete="off" class="form-control mx-auto w-auto" name="birthday" placeholder="Birthday" type="date">
+        </div>
+        <button class="btn btn-primary" type="submit">Add contact</button>
+    </form>
+{% endblock %}

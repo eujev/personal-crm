@@ -1,8 +1,8 @@
 from cs50 import SQL
 from flask import Flask, flash, redirect, render_template, request, session
-from flask_session import Session
 from werkzeug.security import check_password_hash, generate_password_hash
 
+from flask_session import Session
 from helpers import apology, login_required
 
 app = Flask(__name__)
@@ -49,8 +49,7 @@ def login():
 
         # Query database for username
         rows = db.execute(
-            "SELECT * FROM users WHERE username = ?",
-            request.form.get("username")
+            "SELECT * FROM users WHERE username = ?", request.form.get("username")
         )
 
         # Ensure username exists and password is correct
@@ -112,11 +111,12 @@ def register():
             return apology("password needs to match", 400)
 
         # Insert user into database
-        db.execute("INSERT INTO users (username, hash) VALUES(?, ?)",
-                   username, generate_password_hash(password))
-        id = db.execute(
-            "SELECT id FROM users WHERE username = ?", username
+        db.execute(
+            "INSERT INTO users (username, hash) VALUES(?, ?)",
+            username,
+            generate_password_hash(password),
         )
+        id = db.execute("SELECT id FROM users WHERE username = ?", username)
 
         # Remember which user has logged in
         session["user_id"] = id[0]["id"]
@@ -125,3 +125,41 @@ def register():
     # User reached route via GET (as by clicking a link or via redirect)
     else:
         return render_template("register.html")
+
+
+@app.route("/add_contact", methods=["GET", "POST"])
+@login_required
+def add_cash():
+    if request.method == "POST":
+        firstname = request.form.get("firstname")
+        if not firstname:
+            return redirect("/")
+        birthday = request.form.get("birthday")
+        if not birthday:
+            birthday = "NULL"
+        lastname = request.form.get("lastname")
+        address = request.form.get("address")
+        email = request.form.get("email")
+        db.execute(
+            "INSERT INTO people (firstname, lastname, birthday, address, mail, user_id) VALUES(?, ?, ?, ?, ?, ?)",
+            firstname,
+            lastname,
+            birthday,
+            address,
+            email,
+            session["user_id"],
+        )
+        flash("Added contact!")
+        return redirect("/")
+    else:
+        return render_template("add_contact.html")
+
+
+@app.route("/contacts")
+@login_required
+def contacts():
+    """Show all contacts"""
+    user_contacts = db.execute(
+        "SELECT firstname, lastname FROM people WHERE user_id = ?", session["user_id"]
+    )
+    return render_template("contacts.html", user_contacts=user_contacts)
