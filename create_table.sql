@@ -5,6 +5,6 @@ CREATE TABLE people(
     lastname TEXT,
     birthday TEXT,
     address TEXT,
-    mail TEST,
+    mail TEXT,
     FOREIGN KEY(user_id) REFERENCES users(id)
 );
