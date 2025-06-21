@@ -16,7 +16,7 @@
             <p class="fw-bold" style='margin: 0'>{{ contact.address }}</p>
             <p class="fw-bold" style='margin: 0'>{{ contact.mail }}</p>
         <a href="/update_contact" class="btn btn-primary">Update Contact</a>
-        <a href="/delete_contact" class="btn btn-primary">Delete Contact</a>
+        <a href="{{ url_for('delete_contact', person_id=contact_id) }}" class="btn btn-primary">Delete Contact</a>
     </div>
 </div>
 {% endblock %}

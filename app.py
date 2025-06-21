@@ -167,7 +167,7 @@ def contacts():
 @app.route("/contact/<person_id>")
 @login_required
 def contact(person_id):
-    """Show all contacts"""
+    """Show contact information"""
     try:
         user_contact = db.execute(
             "SELECT firstname, lastname, birthday, address, mail FROM people WHERE user_id = ? AND id = ?",
@@ -176,7 +176,7 @@ def contact(person_id):
         )
     except ValueError:
         return apology("Contact does not exist")
-    return render_template("contact.html", contact=user_contact[0])
+    return render_template("contact.html", contact=user_contact[0], contact_id=person_id)
 
 
 @app.route("/profile")
@@ -215,10 +215,21 @@ def change_password():
         if confirmation != new_password:
             return apology("new password needs to match", 400)
         else:
-            db.execute("UPDATE users SET hash = ? WHERE id = ?",
-                       generate_password_hash(new_password), session["user_id"])
+            db.execute(
+                "UPDATE users SET hash = ? WHERE id = ?",
+                generate_password_hash(new_password),
+                session["user_id"],
+            )
             flash("Password changed!")
 
         return redirect("/")
     else:
         return render_template("change_password.html")
+
+
+@app.route("/delete_contact/<person_id>")
+@login_required
+def delete_contact(person_id):
+    db.execute("DELETE FROM people WHERE id = ?", person_id)
+    flash("Deleted Contact")
+    return redirect("/")
